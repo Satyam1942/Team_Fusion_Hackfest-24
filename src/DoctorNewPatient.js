@@ -6,7 +6,6 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import LinearProgress from '@mui/material/LinearProgress';
-const FormData = require('form-data');
 
 export default function DoctorNewPatient() {
     const [patientId, setPatientId] = useState('');

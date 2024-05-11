@@ -7,13 +7,11 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import './animations.css';
 import Avatar from '@mui/material/Avatar';
 import logo from './images/healthLogo.png';
 import CardContent from '@mui/material/CardContent';
 import Card from '@mui/material/Card';
 import BackgroundSlideshow from './BackgroundSlideshow';
-import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import { ethers } from "ethers";
 import {useNavigate} from 'react-router-dom';
@@ -21,13 +19,6 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Alert from '@mui/material/Alert';
 
 
-async function generateId() {
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const block = await provider.getBlockNumber();
-  const balance = await provider.getBalance('ethers.eth');
-  console.log(block);
-  console.log(balance);
-}
 
 function LoginForm() {
   const [personType, setPersonType] = React.useState('');
@@ -41,7 +32,7 @@ function LoginForm() {
 
   const handleLoginClick = (personType) => {
     if (personType == 0) {
-      // WalletCard
+      
       navigate('/dashboard/doctor', {state:{doctorId:"Doctor ID: 372487" ,doctorName:"Rohan Dagar",  doctorAge:"Age: 38", doctorGender:"Gender: Male" }});
     } else if (personType == 1) {
       navigate('/dashboard/patient', {state:{patientId:"User ID: 372487" ,patientName:"Satyam",  patientAge:"Age: 23", patientGender:"Gender: Male" }});
@@ -75,15 +66,11 @@ function LoginForm() {
               Login
             </Typography>
 
-            {/* <Divider variant="middle" color='black'/> */}
 
             <Box marginTop={3} style={{ animation: 'slideInRight 1s' }}>
               <TextField id="outlined-basic" label="Address" variant="outlined" required />
             </Box>
 
-            {/* <Box marginTop={2} style={{ animation: 'slideInLeft 1s' }}>
-              <TextField id="outlined-basic" label="Password" variant="outlined" required type="password" />
-            </Box> */}
 
             <Box marginTop={2} style={{ animation: 'slideInRight 1s' }}>
               <FormControl required sx={{ width: '150px' }}>
@@ -105,7 +92,7 @@ function LoginForm() {
             <Stack marginTop={2} style={{ animation: 'slideInBottom 1s' }}>
               <Button variant="outlined" onClick={() => handleLoginClick(personType)} sx={{
                 '&:hover': {
-                  backgroundColor: '#009096', // Change background color on hover
+                  backgroundColor: '#009096', 
                   color: 'white'
                 },
               }}>Login</Button>

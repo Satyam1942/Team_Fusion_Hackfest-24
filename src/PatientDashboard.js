@@ -65,7 +65,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -131,19 +130,19 @@ export default function PatientDashboard(props) {
   };
 
   const handleDrawerClick = (val) => {
-    if (val == 0) {
+    if (val === 0) {
       setDisplayProfile(true);
       setDisplayHistory(false);
       setDisplayLink(false);
-    } else if (val == 1) {
+    } else if (val === 1) {
       setDisplayProfile(false);
       setDisplayHistory(true);
       setDisplayLink(false);
-    } else if (val == 2) {
+    } else if (val === 2) {
       setDisplayProfile(false);
       setDisplayHistory(false);
       setDisplayLink(true);
-    } else if (val == 3) {
+    } else if (val === 3) {
       setDisplaySignOutFragment(true);
 
     }

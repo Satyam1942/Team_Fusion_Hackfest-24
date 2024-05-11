@@ -36,8 +36,8 @@ export default function LabNewPatient() {
         const seconds = currentDate.getSeconds();
         const milliseconds = currentDate.getMilliseconds();
         const day = currentDate.getDate();
-        const month = currentDate.getMonth() + 1; // Month is zero-indexed, so we add 1
-        const year = currentDate.getFullYear(); // Get last two digits of the year
+        const month = currentDate.getMonth() + 1; 
+        const year = currentDate.getFullYear(); 
 
         // Format the components with leading zeros if necessary
         const formattedHours = hours.toString().padStart(2, '0');

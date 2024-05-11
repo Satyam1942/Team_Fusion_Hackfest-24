@@ -108,14 +108,13 @@ export default function PatientHistoryTable(props) {
   };
 
   React.useEffect(() => {
-    if (!props.tableData) return; // Do nothing if tableData is not available
+    if (!props.tableData) return; 
     const data = JSON.parse(props.tableData);
     const newRow = createData(data.doctorId, data.timestamp, data.prescription);
     setRows(prevRows => [...prevRows, newRow]);
   }, [props.tableData]);
 
   if (!props.tableData) {
-    // Render a placeholder or loading state
     console.log(props.tableData);
     return (
       <Box sx={{ display: 'flex' }}>
@@ -151,7 +150,7 @@ export default function PatientHistoryTable(props) {
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                       {columns.map((column, index) => {
                         const value = row[column.id];
-                        if (index == 1) {
+                        if (index === 1) {
                           return (
                             <TableCell key={column.id} align={column.align}>
                               <Button variant="outlined" onClick={handleClickOpen}>
@@ -159,7 +158,7 @@ export default function PatientHistoryTable(props) {
                               </Button>
                             </TableCell>
                           );
-                        } else if (index == 4) {
+                        } else if (index === 4) {
                           return (
                             <TableCell key={column.id} align={column.align}>
                               <Button variant="outlined" onClick={openPrescriptionHandler}>

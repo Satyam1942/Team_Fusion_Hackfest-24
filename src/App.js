@@ -9,25 +9,25 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 function App() {
 
-  // Create your custom theme
+  
   const theme = createTheme({
     palette: {
       primary: {
-        main: '#00796B', // Teal for a sense of calmness and balance
+        main: '#00796B', 
       },
       secondary: {
-        main: '#FF6E40', // Coral for warmth and energy
+        main: '#FF6E40', 
       },
       background: {
-        default: '#FFFFFF', // White background for cleanliness and clarity
+        default: '#FFFFFF', 
       },
       text: {
-        primary: '#333333', // Dark gray for primary text
-        secondary: '#666666', // Light gray for secondary text
+        primary: '#333333', 
+        secondary: '#666666', 
       },
-      // You can add more custom palette colors if needed
+      
     },
-    // Add other theme options like typography, spacing, etc.
+    
   });
 
   return (

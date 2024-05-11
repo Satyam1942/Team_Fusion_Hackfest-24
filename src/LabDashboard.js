@@ -55,7 +55,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -118,11 +117,11 @@ export default function DoctorDashboard() {
 
 
   const handleDrawerClick = (index)=> {
-    if(index==0){
+    if(index===0){
         setDisplayLabProfile(true);
         setDisplayNewPatient(false);
     }
-    else if(index==1){
+    else if(index===1){
         setDisplayLabProfile(false);
         setDisplayNewPatient(true);
     }

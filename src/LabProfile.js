@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Card from './DoctorProfileCard';
 
@@ -11,9 +9,6 @@ export default function  LabProfile(props) {
   const  id =  props.props.labId;
 
 
-  const name2 = "ENT Specialist";
-  const name3 = "";
-  const name4 = "";
 
   const description1 = "As a doctor, I am entrusted with the responsibility of safeguarding and promoting the health and well-being of my patients. Every day, I walk into the hospital or clinic with a sense of purpose and dedication to provide the best possible care to those who entrust me with their health.";
   const description2 = "5 star rated by more than thousand patients";
