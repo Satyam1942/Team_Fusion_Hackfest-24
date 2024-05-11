@@ -31,6 +31,8 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import Fab from '@mui/material/Fab';
 import  {SmartToy}  from '@mui/icons-material';
 import Profile from './PatientProfile';
+import History from './PatientHistory';
+import LinkNew from './PatientLinkNew';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 
@@ -106,6 +108,8 @@ export default function PatientDashboard(props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [displayProfile, setDisplayProfile] = React.useState(true);
+  const [displayHistory, setDisplayHistory] = React.useState(false);
+  const [displayLink, setDisplayLink] = React.useState(false);
   const [displaySignOutFragment, setDisplaySignOutFragment] = React.useState(false);
   const [displayChatBotFragment, setDisplayChatBotFragment] = React.useState(false);
 
@@ -127,7 +131,22 @@ export default function PatientDashboard(props) {
   };
 
   const handleDrawerClick = (val) => {
-    setDisplayProfile(true);
+    if (val == 0) {
+      setDisplayProfile(true);
+      setDisplayHistory(false);
+      setDisplayLink(false);
+    } else if (val == 1) {
+      setDisplayProfile(false);
+      setDisplayHistory(true);
+      setDisplayLink(false);
+    } else if (val == 2) {
+      setDisplayProfile(false);
+      setDisplayHistory(false);
+      setDisplayLink(true);
+    } else if (val == 3) {
+      setDisplaySignOutFragment(true);
+
+    }
   };
 
   return (
@@ -211,7 +230,11 @@ export default function PatientDashboard(props) {
       {/*PROFILE*/}
       {displayProfile && <Box component="main" sx={{ flexGrow: 1, p: 3 }}>  <DrawerHeader /> <Profile props={state} /> </Box>}
 
+      {/*History*/}
+      {displayHistory && <Box component="main" sx={{ flexGrow: 1, p: 3 }}> <DrawerHeader /> <History /> </Box>}
 
+      {/* DisplayLink */}
+      {displayLink && <Box component="main" sx={{ flexGrow: 1, p: 3 }}> <DrawerHeader /> <LinkNew /> </Box>}
 
       <React.Fragment>
         <Dialog
