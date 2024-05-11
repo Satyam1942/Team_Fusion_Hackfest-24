@@ -3,6 +3,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import DoctorDashboard from './DoctorDashboard';
+import PatientDashboard from './PatientDashboard';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard/doctor" element={<DoctorDashboard />} />
+          <Route path="/dashboard/patient" element={<PatientDashboard />} />
         </Routes>
       </Router>
     </ThemeProvider>
