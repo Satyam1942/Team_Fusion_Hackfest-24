@@ -172,7 +172,7 @@ export default function DoctorDashboard() {
 
   async function fetchResponse() {
     try {
-      const res = await axios.post('http://localhost:5000/answer', {
+      const res = await axios.post(' http://localhost:5000/answer', {
         context: `Visit 1: Patient Name: John Doe. Age: 35. Date: May 5, 2024. Diagnosis: Acute Sinusitis. Symptoms: Nasal congestion, facial   pain, headache. Prescription: Amoxicillin, decongestant spray. Visit 2: Patient Name: John Doe.Age: 35.Date: May 12, 2024. Diagnosis: Allergic Rhinitis. Symptoms: Sneezing, runny nose, itchy eyes. Prescription: Loratadine, nasal corticosteroid spray.Visit 3: Patient Name: John Doe.Age: 35.Date: May 19, 2024. Diagnosis: Chronic Sinusitis.Symptoms: Persistent nasal congestion, facial pressure, decreased sense of smell. Prescription: Amoxicillin-clavulanate, saline nasal irrigation. Visit 4: Patient Name: John Doe.Age: 35. Date: May 26, 2024. Diagnosis: Acute Bronchitis.Symptoms: Cough, chest discomfort, fatigue.Prescription: Azithromycin, cough syrup. Visit 5: Patient Name: John Doe. Age: 35. Date: June 2, 2024. Diagnosis: Seasonal Allergic Conjunctivitis. Symptoms: Itchy and red eyes, watery discharge. Prescription: Olopatadine eye drops, artificial tears.`,
         question: prompt
       });

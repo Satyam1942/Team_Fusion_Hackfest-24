@@ -1,23 +1,5 @@
 [
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "patientID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "count",
-				"type": "uint256"
-			}
-		],
-		"name": "getPrescription",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -43,6 +25,12 @@
 				"indexed": true,
 				"internalType": "uint256",
 				"name": "patientId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "password",
 				"type": "uint256"
 			}
 		],
@@ -155,6 +143,47 @@
 				"type": "uint256"
 			}
 		],
+		"name": "FetchPrescription",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "DoctorID",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "PrescriptionHash",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct HackFest.DoctorPrescription[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "patientID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "last_index",
+				"type": "uint256"
+			}
+		],
 		"name": "getAllTheDetails",
 		"outputs": [
 			{
@@ -188,30 +217,6 @@
 				"internalType": "struct HackFest.Labb[]",
 				"name": "",
 				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "doctorID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "getDoctorPrescriptionAsJson",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
 			}
 		],
 		"stateMutability": "view",

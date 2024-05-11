@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
+
 export default function DoctorProfileCard(props) {
 
   return (
@@ -12,8 +13,8 @@ export default function DoctorProfileCard(props) {
       <CardActionArea>
         <CardMedia
           component="img"
-          height="140"
-        //   image="/static/images/cards/contemplative-reptile.jpg"
+          height= 'auto'
+          image= {props.dp}
           alt="green iguana"
         />
         <CardContent>

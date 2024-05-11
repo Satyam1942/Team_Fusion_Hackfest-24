@@ -20,11 +20,11 @@ async function ConnectWallet() {
     return signer;
 }
 
-function WalletButton(props) {
+function WalletButton() {
     const [name, setName] = useState('');
     const [gender, setGender] = useState('');
     const [age, setAge] = useState('');
-    const {labId, patientId, imageHash, reportHash} = props;
+   
 
     const connectWalletAndRegisterPatient = async () => {
         const signer = await ConnectWallet();
@@ -55,7 +55,7 @@ function WalletButton(props) {
         }
     }
 
-    const connectWalletandUploadLab = async () => {
+    const connectWalletandUploadLab = async (labId, patientId, imageHash, reportHash) => {
         const signer = await ConnectWallet();
         if (signer) {
             const contractAddress = '0xb738A6d0b59fef9053D3E7E8Bf12d9D8b64eC722'; // Replace with your contract address
@@ -103,3 +103,5 @@ function WalletButton(props) {
         </div>
     );
 }
+
+export default WalletButton;

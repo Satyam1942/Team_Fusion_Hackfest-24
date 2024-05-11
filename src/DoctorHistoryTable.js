@@ -17,9 +17,13 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import axios from 'axios';
 import Skeleton from '@mui/material/Skeleton';
+<<<<<<< HEAD
+
+=======
+>>>>>>> 00af297ca046f2495d6305c42e0646a91418fdf0
 
 const columns = [
-  { id: 'doctorId', label: 'Doctor Id', minWidth: 170 },
+  { id: 'labId', label: 'Lab Id', minWidth: 170 },
   { id: 'summary', label: 'Summary', minWidth: 100 },
   {
     id: 'date',
@@ -44,10 +48,10 @@ const columns = [
   },
 ];
 
-function createData(doctorId, timestamp, prescription) {
+function createData(labId, timestamp, prescription) {
   const date = timestamp.split(",")[1];
   const time = timestamp.split(",")[0];
-  return { doctorId, date, time, prescription };
+  return { labId, date, time, prescription };
 }
 
 export default function DoctorHistoryTable(props) {
@@ -57,14 +61,26 @@ export default function DoctorHistoryTable(props) {
   const [rows, setRows] = React.useState([]);
   const [summary, setSummary] = React.useState('');
   const summaryGeneratingAPIURL = "http://localhost:5000/summarize";
+  const tableData = props.tableData;
+  console.log(tableData);
 
-  async function fetchSummary() {
+  const OpenLinkButton = ({ link, buttonText }) => {
+    const openLinkInNewTab = () => {
+      window.open(link, '_blank');
+    };
+  
+    return (
+      <Button variant="contained" onClick={openLinkInNewTab}>
+        {buttonText}
+      </Button>
+    );
+  };
+
+  async function fetchSummary(prescription) {
     try {
-      const data = JSON.parse(props.tableData);
-      console.log(data.prescription);
+
       const res = await axios.post(summaryGeneratingAPIURL, {
-        text: `Symptoms: Nasal congestion, facial pain, headache.
-        Prescription: Amoxicillin, decongestant spray.`
+        text: prescription
       });
       console.log(res);
       return res.data.summary;
@@ -84,8 +100,11 @@ export default function DoctorHistoryTable(props) {
 
   const [open, setOpen] = React.useState(false);
   const [openPrescription, setOpenPrescription] = React.useState(false);
+  const [selectedRowIndex, setSelectedRowIndex] = React.useState(0);
 
-  const openPrescriptionHandler = () =>{
+  const openPrescriptionHandler = (index) =>{
+    console.log(index);
+    setSelectedRowIndex(index);
     setOpenPrescription(true);
   }
 
@@ -93,10 +112,10 @@ export default function DoctorHistoryTable(props) {
     setOpenPrescription(false);
   }
 
-  const handleClickOpen = async () => {
+  const handleClickOpen = async (index) => {
     setOpen(true);
     setLoading(true);
-    const data = await fetchSummary();
+    const data = await fetchSummary(index.prescription);
     console.log(data);
     setSummary(data);
     setLoading(false);
@@ -108,11 +127,14 @@ export default function DoctorHistoryTable(props) {
   };
 
   React.useEffect(() => {
-    if (!props.tableData) return; // Do nothing if tableData is not available
-    const data = JSON.parse(props.tableData);
-    const newRow = createData(data.doctorId, data.timestamp, data.prescription);
-    setRows(prevRows => [...prevRows, newRow]);
-  }, [props.tableData]);
+    if (!tableData) return; // Do nothing if tableData is not available
+   
+    tableData.forEach((data) => {
+      const newRow = createData(data.labReport.labId, data.labReport.timestamp, data.labReport.prescription);
+      setRows(prevRows => [...prevRows, newRow]);
+    });
+  
+  }, [tableData]);
 
   if (!props.tableData) {
     // Render a placeholder or loading state
@@ -146,7 +168,7 @@ export default function DoctorHistoryTable(props) {
             <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
+                .map((row,rowIndex) => {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                       {columns.map((column, index) => {
@@ -154,7 +176,7 @@ export default function DoctorHistoryTable(props) {
                         if (index == 1) {
                           return (
                             <TableCell key={column.id} align={column.align}>
-                              <Button variant="outlined" onClick={handleClickOpen}>
+                              <Button variant="outlined" onClick={()=>handleClickOpen(rowIndex)}>
                                 AI
                               </Button>
                             </TableCell>
@@ -162,7 +184,7 @@ export default function DoctorHistoryTable(props) {
                         } else if(index==4){
                           return (
                             <TableCell key={column.id} align={column.align}>
-                              <Button variant="outlined" onClick={openPrescriptionHandler}>
+                              <Button variant="outlined" onClick={()=>openPrescriptionHandler(rowIndex)}>
                                 Open Prescription
                               </Button>
                             </TableCell>
@@ -234,12 +256,12 @@ export default function DoctorHistoryTable(props) {
           </DialogTitle>
           <DialogContent>     
             <DialogContentText id="alert-dialog-description">
-              {JSON.parse(props.tableData).prescription}
+            {tableData[selectedRowIndex]?.labReport.prescription}  
             </DialogContentText>
             
           </DialogContent>
           <DialogActions>
-
+          <OpenLinkButton link={`https://ivory-tricky-chipmunk-595.mypinata.cloud/ipfs/${tableData[selectedRowIndex]?.labReport.reportHash}`} buttonText="Open Report" />
           </DialogActions>
         </Dialog>
       </React.Fragment>

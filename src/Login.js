@@ -17,7 +17,8 @@ import { ethers } from "ethers";
 import {useNavigate} from 'react-router-dom';
 
 import Alert from '@mui/material/Alert';
-
+import patientavatar from "./images/patientAvatar.png"
+import labphoto from "./images/labPhoto.png"
 
 
 function LoginForm() {
@@ -34,9 +35,9 @@ function LoginForm() {
     if (personType == 0) {
       navigate('/dashboard/doctor', {state:{doctorId:"Doctor ID: 372487" ,doctorName:"Rohan Dagar",  doctorAge:"Age: 38", doctorGender:"Gender: Male" }});
     } else if (personType == 1) {
-      navigate('/dashboard/patient', {state:{patientId:"User ID: 372487" ,patientName:"Satyam",  patientAge:"Age: 23", patientGender:"Gender: Male" }});
+      navigate('/dashboard/patient', {state:{patientId:"User ID: 372487" ,patientName:"Satyam",  patientAge:"Age: 23", patientGender:"Gender: Male", dp:patientavatar }});
     } else if (personType == 2) {
-      navigate('/dashboard/lab', {state:{labId:"User ID: 372487" ,labName:"Satyam"}});
+      navigate('/dashboard/lab', {state:{labId:"User ID: 372487" ,labName:"Satyam", dp:labphoto}});
     }
   }
 
@@ -53,7 +54,7 @@ function LoginForm() {
         <CardContent>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-            <Stack marginTop={5} style={{ animation: 'slideInTop 1s' }}>
+            <Stack marginTop={2} style={{ animation: 'slideInTop 1s' }}>
               <Avatar alt="Logo" src={logo} sx={{ width: 100, height: 100 }} />
             </Stack>
 
@@ -64,12 +65,12 @@ function LoginForm() {
             {/* <Divider variant="middle" color='black'/> */}
 
             <Box marginTop={3} style={{ animation: 'slideInRight 1s' }}>
-              <TextField id="outlined-basic" label="Address" variant="outlined" required />
+              <TextField id="outlined-basic" label="Username" variant="outlined" required />
             </Box>
 
-            {/* <Box marginTop={2} style={{ animation: 'slideInLeft 1s' }}>
+            <Box marginTop={2} style={{ animation: 'slideInLeft 1s' }}>
               <TextField id="outlined-basic" label="Password" variant="outlined" required type="password" />
-            </Box> */}
+            </Box> 
 
             <Box marginTop={2} style={{ animation: 'slideInRight 1s' }}>
               <FormControl required sx={{ width: '150px' }}>

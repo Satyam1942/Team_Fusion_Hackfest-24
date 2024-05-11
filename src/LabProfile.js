@@ -9,7 +9,7 @@ import Card from './DoctorProfileCard';
 export default function  LabProfile(props) {
   const name = props.props.labName;
   const  id =  props.props.labId;
-
+  const dp = props.props.dp;
 
   const name2 = "ENT Specialist";
   const name3 = "";
@@ -26,7 +26,7 @@ export default function  LabProfile(props) {
         <Grid container spacing={2}>
           {/* First Grid (Left on small screens, Right on larger screens) */}
           <Grid item xs={12} md={6} order={{ xs: 1, md: 1 }} style={{ animation: 'slideInRight 1s' }}>
-            <Card name={name}  id={id}>
+            <Card name={name}  id={id} dp = {dp}>
               xs=6 md=4
             </Card>
           </Grid>

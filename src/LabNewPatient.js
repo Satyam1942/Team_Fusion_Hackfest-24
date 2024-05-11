@@ -105,7 +105,7 @@ export default function LabNewPatient() {
     const connectWalletandUploadLab = async (labId, patientId, imageHash, reportHash) => {
         const signer = await ConnectWallet();
         if (signer) {
-            const contractAddress = '0x03C1D6D995F6291E66116006A8EBE01EaD6A8734'; // Replace with your contract address
+            const contractAddress = '0x6c19b5e81b43084641E4CA552D068DbCE96abCCD'; // Replace with your contract address
             const contract = new ethers.Contract(contractAddress, HackFestABI, signer);
      
      try{
@@ -202,6 +202,7 @@ export default function LabNewPatient() {
                 </div>
             </Box>
             }
+            
             {
             allowPrescriptionDisplay && <Stack spacing={2} direction="row" sx={{
                 display: 'flex',

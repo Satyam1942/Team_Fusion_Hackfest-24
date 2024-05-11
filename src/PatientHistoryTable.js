@@ -46,10 +46,10 @@ const columns = [
   },
 ];
 
-function createData(doctorId, timestamp, prescription) {
+function createData(labId, timestamp, prescription) {
   const date = timestamp.split(",")[1];
   const time = timestamp.split(",")[0];
-  return { doctorId, date, time, prescription };
+  return { labId, date, time, prescription };
 }
 
 
@@ -63,6 +63,18 @@ export default function PatientHistoryTable(props) {
   const tableData = props.tableData;
   console.log(tableData);
 
+  const OpenLinkButton = ({ link, buttonText }) => {
+    const openLinkInNewTab = () => {
+      window.open(link, '_blank');
+    };
+  
+    return (
+      <Button variant="contained" onClick={openLinkInNewTab}>
+        {buttonText}
+      </Button>
+    );
+  };
+  
   async function fetchSummary(prescription) {
     try {
 
@@ -87,8 +99,11 @@ export default function PatientHistoryTable(props) {
 
   const [open, setOpen] = React.useState(false);
   const [openPrescription, setOpenPrescription] = React.useState(false);
+  const [selectedRowIndex, setSelectedRowIndex] = React.useState(0);
 
-  const openPrescriptionHandler = () => {
+  const openPrescriptionHandler = (index) => {
+    console.log(index);
+    setSelectedRowIndex(index);
     setOpenPrescription(true);
   }
 
@@ -117,7 +132,6 @@ export default function PatientHistoryTable(props) {
     if (!tableData) return; // Do nothing if tableData is not available
    
     tableData.forEach((data) => {
-      console.log(data.labReport.labId);
       const newRow = createData(data.labReport.labId, data.labReport.timestamp, data.labReport.prescription);
       setRows(prevRows => [...prevRows, newRow]);
     });
@@ -156,7 +170,7 @@ export default function PatientHistoryTable(props) {
             <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
+                .map((row,rowIndex) => {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                       {columns.map((column, index) => {
@@ -170,9 +184,10 @@ export default function PatientHistoryTable(props) {
                             </TableCell>
                           );
                         } else if (index == 4) {
+                          
                           return (
                             <TableCell key={column.id} align={column.align}>
-                              <Button variant="outlined" onClick={openPrescriptionHandler}>
+                              <Button variant="outlined" onClick={()=>openPrescriptionHandler(rowIndex)}>
                                 Open Prescription
                               </Button>
                             </TableCell>
@@ -244,12 +259,12 @@ export default function PatientHistoryTable(props) {
           </DialogTitle>
           <DialogContent>     
             <DialogContentText id="alert-dialog-description">
-              {tableData[0].labReport.prescription}  
+              {tableData[selectedRowIndex]?.labReport.prescription}  
             </DialogContentText>
             
           </DialogContent>
           <DialogActions>
-
+            <OpenLinkButton link={`https://ivory-tricky-chipmunk-595.mypinata.cloud/ipfs/${tableData[selectedRowIndex]?.labReport.reportHash}`} buttonText="Open Report" />
           </DialogActions>
         </Dialog>
       </React.Fragment>
