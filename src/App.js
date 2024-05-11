@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import DoctorDashboard from './DoctorDashboard';
 import PatientDashboard from './PatientDashboard';
+import LabDashboard from './LabDashboard';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 function App() {
@@ -31,12 +32,12 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <MousePointer/> */}
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard/doctor" element={<DoctorDashboard />} />
           <Route path="/dashboard/patient" element={<PatientDashboard />} />
+          <Route path="/dashboard/lab" element={<LabDashboard />} />
         </Routes>
       </Router>
     </ThemeProvider>

@@ -53,7 +53,6 @@ function LoginForm() {
   return (
     <div >
       <BackgroundSlideshow />
-      
 
       <Box sx={{ width: '100%' }}>
         <LinearProgress />
