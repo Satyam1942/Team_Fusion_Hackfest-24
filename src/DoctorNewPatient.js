@@ -4,8 +4,10 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import uploadFile from './uploadFile';
 import Alert from '@mui/material/Alert';
 import LinearProgress from '@mui/material/LinearProgress';
+const FormData = require('form-data');
 
 export default function DoctorNewPatient() {
     const [patientId, setPatientId] = useState('');
@@ -62,10 +64,16 @@ export default function DoctorNewPatient() {
         // const oldData = await 
         const json = { "patientId": patientId,'doctorId': doctorId, "prescription": patientPrescription , 'timestamp': timestamp}
         // const mergedJson = [...oldData, json];
-        
+        const response = await uploadFile(json, `${patientId}+${doctorId}`);
+        // const responseNew = await uploadFile(mergedJson, `${patientId}`);
+
        
         setDisplayProgress(false);
-        
+        if (response.status == 200) {
+            setSubmissionSuccess(true);
+        }else if (response.status == 400) {
+            setSubmissionFailure(true);
+        } 
     }
 
     return (

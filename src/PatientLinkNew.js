@@ -69,7 +69,7 @@ function PatientLinkNew() {
                 marginX: 90
 
             }} >
-                <Button variant="contained"  style={{ animation: 'slideInTop 1s' }} >Submit</Button>
+                <Button variant="contained"  style={{ animation: 'slideInTop 1s' }} >Connect</Button>
             </Stack>
         </>
     );

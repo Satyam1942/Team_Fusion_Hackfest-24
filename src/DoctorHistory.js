@@ -8,17 +8,23 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Table from './DoctorHistoryTable';
+import retrieveData from './retrieveFile';
 import Alert from '@mui/material/Alert';
 
 export default function DoctorHistory() {
     const [time, setTime] = React.useState('');
+    const [type, setType] = React.useState('');
     const [patientId, setPatientId] = React.useState('');
     const [displayTable, setDisplayTable] = React.useState(false);
     const [submissionFailure, setSubmissionFailure] = React.useState(false);
-    const [tableData, setTableData] = React.useState({});
+    const [tableData,setTableData] = React.useState({});
 
     const handleChange = (event) => {
         setTime(event.target.value);
+    };
+
+    const handleTypeChange = (event) => {
+        setType(event.target.value);
     };
 
     const handlePatientIdChange = (event) => {
@@ -27,15 +33,35 @@ export default function DoctorHistory() {
 
     React.useEffect(() => {
         console.log(tableData);
-    }, [tableData]);
+      }, [tableData]);
 
+    const onSubmit = async () => {
+        if(time=='' || patientId=='' || type==''){
+            setSubmissionFailure(true)
+            return;
+        }else {
+            setSubmissionFailure(false);
+        }
 
+        /* get hash from block chain */
+        const CID = `bafkreidniwetwo5kyz4gwbq7tflbdxwwamzpl2c7h25nojhoflfoicdsjm`
+        const response = await retrieveData(CID);
+        const jsonObject = response;
+
+        setTableData(jsonObject);
+        setDisplayTable(true);
+        
+        // } else {
+        //     console.log(response);
+        //     setSubmissionFailure(true);
+        // }
+    };
 
     return (
         <>
 
             <Stack sx={{ width: '100%', marginBottom: 2 }} spacing={2} zIndex={2}>
-                {submissionFailure && <Alert severity="error">Fetching Details Failed!!.</Alert>}
+             {submissionFailure && <Alert severity="error">Fetching Details Failed!!.</Alert>}
             </Stack>
             <Box
                 component="form"
@@ -48,15 +74,16 @@ export default function DoctorHistory() {
                 autoComplete="off"
 
             >
-                <TextField id="outlined-basic" label="Patient Id" variant="outlined" required style={{ animation: 'slideInLeft 1s' }} onChange={handlePatientIdChange} />
+                <TextField id="outlined-basic" label="Patient Id" variant="outlined" required style={{ animation: 'slideInLeft 1s' }}  onChange={handlePatientIdChange}/>
 
             </Box>
 
             <Box sx={{
                 display: 'flex',
                 justifyContent: 'center',
+                marginY: 2
             }}>
-                <FormControl sx={{ width: 400 }} style={{ animation: 'slideInRight 1s' }}>
+                <FormControl sx={{ width: 250 }} style={{ animation: 'slideInRight 1s' }}>
                     <InputLabel id="demo-simple-select-label">Timeline</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
@@ -66,22 +93,44 @@ export default function DoctorHistory() {
                         onChange={handleChange}
                         required
                     >
-                        <MenuItem value={10}>Last 30 days</MenuItem>
-                        <MenuItem value={20}>Last 60 days</MenuItem>
-                        <MenuItem value={30}>Last 90  days</MenuItem>
+                        <MenuItem value={10}>Last 10 prescriptions</MenuItem>
+                        <MenuItem value={20}>Last 20 prescriptions</MenuItem>
+                        <MenuItem value={30}>Last 30 prescriptions</MenuItem>
                     </Select>
                 </FormControl>
             </Box>
-
+            
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginY: 2
+            }}>
+                <FormControl sx={{ width: 200 }} style={{ animation: 'slideInRight 1s' }}>
+                    <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={type}
+                        label="Timeline"
+                        onChange={handleTypeChange}
+                        required
+                    >
+                        <MenuItem value={0}>Prescriptions</MenuItem>
+                        <MenuItem value={1}>Report</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
+            
             <Stack width={10} sx={{
                 alignItems: 'center',
                 marginY: 2,
                 marginX: 90
 
             }} >
+                <Button variant="contained" onClick={onSubmit} style={{ animation: 'slideInTop 1s' }} >Submit</Button>
             </Stack>
 
-            {displayTable && <Table tableData={tableData} />}
+            {displayTable && <Table  tableData = {tableData}/>}
 
         </>
 

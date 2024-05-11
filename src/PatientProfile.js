@@ -19,18 +19,21 @@ export default function PatientProfile(props) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
-        <Grid item xs={6} md={4} style={{ animation: 'slideInRight 1s' }}>
-          <Card name = {patientName} age = {patientAge} gender  = {patientGender}  id = {patientId} >xs=6 md=8</Card>
-        </Grid>
-        <Grid item xs={6} md={4} style={{ animation: 'slideInLeft 1s' }}>
-          <Card >xs=6 md=4</Card>
-        </Grid>
-        <Grid item xs={6} md={4} style={{ animation: 'slideInBottom 1s' }}>
-          <Card >xs=6 md=4</Card>
-        </Grid>
-        <Grid item xs={6} md={4} style={{ animation: 'slideInTop 1s' }}>
-          <Card >xs=6 md=8</Card>
-        </Grid>
+          <Grid container spacing={2}>
+      {/* First Grid (Left on small screens, Right on larger screens) */}
+      <Grid item xs={12} md={6} order={{ xs: 1, md: 1 }}  style={{ animation: 'slideInRight 1s' }}>
+        <Card name={patientName} age={patientAge} id={patientId} gender={patientGender}>
+          xs=6 md=4
+        </Card>
+      </Grid>
+
+      {/* Second Grid (Right on small screens, Left on larger screens) */}
+      <Grid item xs={12} md={6} order={{ xs: 2, md: 2 }} marginTop ={35} style={{ animation: 'slideInLeft 1s' }}>
+        <Card  >
+          xs=6 md=4
+        </Card>
+      </Grid>
+    </Grid>
       </Grid>
     </Box>
   );

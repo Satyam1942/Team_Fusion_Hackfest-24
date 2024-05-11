@@ -7,18 +7,43 @@ import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Table from './PatientHistoryTable';
+import TableLab from './PatientHistoryTable';
+import TableDoctor from './PatientHistoryTable';
+
 import retrieveData from './retrieveFile';
 import Alert from '@mui/material/Alert';
+import { ethers } from 'ethers';
+import { useState } from 'react';
+import HackFestABI from './HackFestABI.json'
 
-//hello world
+async function ConnectWallet() {
+    if (!window.ethereum) {
+        console.error('No Ethereum provider found. Make sure MetaMask is installed.');
+        return;
+    }
+
+    try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+    } catch (error) {
+        console.error('Error requesting accounts:', error);
+        return;
+    }
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    return signer;
+}
 
 export default function PatientHistory() {
     const [time, setTime] = React.useState('');
     const [type, setType] = React.useState('');
-    const [displayTable, setDisplayTable] = React.useState(false);
+
+    const [tableData, setTableData] = React.useState([]);
+    const [displayTableLab, setDisplayTableLab] = React.useState(false);
+    const [displayTableDoctor, setDisplayTableDoctor] = React.useState(false);
+
     const [submissionFailure, setSubmissionFailure] = React.useState(false);
-    const [tableData, setTableData] = React.useState({});
+    const patientId = 1715439660;
 
     const handleChange = (event) => {
         setTime(event.target.value);
@@ -26,6 +51,7 @@ export default function PatientHistory() {
 
     const handleTypeChange = (event) => {
         setType(event.target.value);
+
     };
 
 
@@ -34,20 +60,76 @@ export default function PatientHistory() {
     }, [tableData]);
 
 
+
+    async function FetchReports(patientId, count) {
+        const signer = await ConnectWallet();
+        if (signer) {
+            const contractAddress = '0x03C1D6D995F6291E66116006A8EBE01EaD6A8734'; // Replace with your contract address
+            const contract = new ethers.Contract(contractAddress, HackFestABI, signer);
+
+            try {
+                const patientReports = await contract.getAllTheDetails(patientId, 2);
+                console.log('Patient details:', patientReports);
+                return patientReports;
+            }
+            catch (error) {
+                console.error('Error fetching patient details:', error);
+            }
+        }
+    }
+
+    async function processCIDArray(CIDArray) {
+        const responseArray = [];
+        for (const obj of CIDArray) {
+            const labReport = await retrieveData(obj.Report_Hash);
+            responseArray.push({ "labReport": JSON.parse(labReport) });
+        }
+        return responseArray;
+    }
+
     const onSubmit = async () => {
-        
-        if(time==='' || type===''){
+
+        if (time === '' || type === '') {
             setSubmissionFailure(true)
             return;
-        }else {
+        } else {
             setSubmissionFailure(false);
         }
+    
+        if (type===1) {
+            const res = await FetchReports(patientId);
 
-        const CID = `bafkreidniwetwo5kyz4gwbq7tflbdxwwamzpl2c7h25nojhoflfoicdsjm`;
-        const response = await retrieveData(CID);
-        const jsonObject = response;
-        setTableData(jsonObject);
-        setDisplayTable(true);
+            const CIDArray = []
+            res.forEach((item, index) => {
+                const data = { Prescription: item.Prescription, Report_Hash: item.Report_Hash };
+                console.log(data);
+                CIDArray.push(data);
+            });
+
+            console.log(CIDArray);
+            const responseArray = await processCIDArray(CIDArray);
+            // console.log(responseArray); 
+            setTableData(responseArray);
+            setDisplayTableLab(true);
+        } else  {
+            // const res = await FetchPrescription(patientId);
+
+            // const CIDArray = []
+            // res.forEach((item, index) => {
+            //     const data = { Prescription: item.Prescription };
+            //     console.log(data);
+            //     CIDArray.push(data);
+            // });
+
+            // console.log(CIDArray);
+            // const responseArray = await processCIDArray(CIDArray);
+            // // console.log(responseArray); 
+            // setTableData(responseArray);
+            //  setDisplayTableDoctor(true);
+        }
+
+       
+
     };
 
     return (
@@ -60,7 +142,7 @@ export default function PatientHistory() {
                 minWidth: 120, display: 'flex',
                 justifyContent: 'center',
             }}>
-                <FormControl sx={{ width: 150 }} style={{ animation: 'slideInRight 1s' }} required>
+                <FormControl sx={{ width: 200 }} style={{ animation: 'slideInRight 1s' }} required>
                     <InputLabel id="demo-simple-select-label">Timeline</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
@@ -70,9 +152,9 @@ export default function PatientHistory() {
                         onChange={handleChange}
                         required
                     >
-                        <MenuItem value={10}>Last 30 days</MenuItem>
-                        <MenuItem value={20}>Last 60 days</MenuItem>
-                        <MenuItem value={30}>Last 90  days</MenuItem>
+                        <MenuItem value={10}>Last 30 documents</MenuItem>
+                        <MenuItem value={20}>Last 60 documents</MenuItem>
+                        <MenuItem value={30}>Last 90 documents</MenuItem>
                     </Select>
                 </FormControl>
             </Box>
@@ -102,10 +184,12 @@ export default function PatientHistory() {
                 display: 'flex',
                 justifyContent: 'center', marginY: 2
             }} >
-                <Button variant="contained" onClick={onSubmit} style={{ animation: 'slideInBottom 1s' }} >Submit</Button>
+                <Button variant="contained" onClick={onSubmit} style={{ animation: 'slideInBottom 1s' }}>Submit</Button>
             </Stack>
 
-            {displayTable && <Table tableData = {tableData}/>}
+            {displayTableLab && <TableLab tableData={tableData} />}
+            {displayTableDoctor && <TableDoctor tableData={tableData} />}
+
 
         </>
 

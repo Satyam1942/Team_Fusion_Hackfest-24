@@ -34,6 +34,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import TextField from '@mui/material/TextField';
 import Face6Icon from '@mui/icons-material/Face6';
 import { useNavigate , useLocation} from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
+import Skeleton from '@mui/material/Skeleton';
 
 const drawerWidth = 240;
 
@@ -112,6 +115,15 @@ export default function DoctorDashboard() {
   const [displayNewPatient, setDisplayNewPatient] = React.useState(false);
   const [displaySignOutFragment, setDisplaySignOutFragment] = React.useState(false);
   const [displayChatBotFragment, setDisplayChatBotFragment] = React.useState(false);
+  const [responseAI, setResponseAI] = React.useState(false);
+  const [response, setResponse] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const [prompt, setPrompt] = useState('');
+
+  // Handler function to update the prompt state as the user types
+  const handlePromptChange = (event) => {
+    setPrompt(event.target.value);
+  };
 
   const navigate = useNavigate();
 
@@ -128,6 +140,15 @@ export default function DoctorDashboard() {
 
   const handleClose = () => {
     setDisplaySignOutFragment(false);
+  };
+
+  const handleClickOpen = async () => {
+    setResponseAI(true);
+    setLoading(true);
+    const data = await fetchResponse();
+    console.log(data);
+    setResponse(data);
+    setLoading(false);
   };
 
   const handleDrawerClick = (val) => {
@@ -148,6 +169,19 @@ export default function DoctorDashboard() {
       setDisplaySignOutFragment(true);
     }
   };
+
+  async function fetchResponse() {
+    try {
+      const res = await axios.post('http://localhost:5000/answer', {
+        context: `Visit 1: Patient Name: John Doe. Age: 35. Date: May 5, 2024. Diagnosis: Acute Sinusitis. Symptoms: Nasal congestion, facial   pain, headache. Prescription: Amoxicillin, decongestant spray. Visit 2: Patient Name: John Doe.Age: 35.Date: May 12, 2024. Diagnosis: Allergic Rhinitis. Symptoms: Sneezing, runny nose, itchy eyes. Prescription: Loratadine, nasal corticosteroid spray.Visit 3: Patient Name: John Doe.Age: 35.Date: May 19, 2024. Diagnosis: Chronic Sinusitis.Symptoms: Persistent nasal congestion, facial pressure, decreased sense of smell. Prescription: Amoxicillin-clavulanate, saline nasal irrigation. Visit 4: Patient Name: John Doe.Age: 35. Date: May 26, 2024. Diagnosis: Acute Bronchitis.Symptoms: Cough, chest discomfort, fatigue.Prescription: Azithromycin, cough syrup. Visit 5: Patient Name: John Doe. Age: 35. Date: June 2, 2024. Diagnosis: Seasonal Allergic Conjunctivitis. Symptoms: Itchy and red eyes, watery discharge. Prescription: Olopatadine eye drops, artificial tears.`,
+        question: prompt
+      });
+      console.log(res);
+      return res.data.answer;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -213,7 +247,7 @@ export default function DoctorDashboard() {
       </Drawer>
 
       <Box sx={{
-        '& > :not(style)': { m: 1 }, position: 'fixed',
+        '& >  :not(style)': { m: 1 }, position: 'fixed',
         bottom: '16px',
         right: '16px',
         zIndex: 1000,
@@ -273,21 +307,33 @@ export default function DoctorDashboard() {
           <DialogContentText>
             How may I help you today?
           </DialogContentText>
+          {loading && <Box sx={{ width: 300 }}>
+              <Skeleton />
+              <Skeleton animation="wave" />
+              <Skeleton animation={false} />
+            </Box>}
+            { !loading && 
+            <DialogContentText id="alert-dialog-description" fontWeight="bold"  sx={{ marginY: '30px' }} >
+              {response}
+            </DialogContentText>
+            }
           <TextField
             autoFocus
             required
-            margin="dense"
             id="name"
             name="prompt"
             label="Enter Prompt"
             type="message"
             fullWidth
             variant="standard"
+            value={prompt}  // Set the value prop to the state variable
+            onChange={handlePromptChange}
+           
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={()=>{setDisplayChatBotFragment(false)}}>Cancel</Button>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" onClick={handleClickOpen}>Submit</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

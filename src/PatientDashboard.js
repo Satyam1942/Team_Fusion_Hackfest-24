@@ -34,6 +34,9 @@ import Profile from './PatientProfile';
 import History from './PatientHistory';
 import LinkNew from './PatientLinkNew';
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useState } from 'react';
+import Skeleton from '@mui/material/Skeleton';
 
 
 
@@ -65,6 +68,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -111,11 +115,19 @@ export default function PatientDashboard(props) {
   const [displayLink, setDisplayLink] = React.useState(false);
   const [displaySignOutFragment, setDisplaySignOutFragment] = React.useState(false);
   const [displayChatBotFragment, setDisplayChatBotFragment] = React.useState(false);
+  const [responseAI, setResponseAI] = React.useState(false);
+  const [response, setResponse] = React.useState('');
+  const [prompt, setPrompt] = useState('');
+  const [loading, setLoading] = React.useState(false);
 
 
   const navigate = useNavigate();
   const { state } = useLocation();
   console.log(state);
+
+  const handlePromptChange = (event) => {
+    setPrompt(event.target.value);
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -129,24 +141,45 @@ export default function PatientDashboard(props) {
     setDisplaySignOutFragment(false);
   };
 
+  const handleClickOpen = async () => {
+    setResponseAI(true);
+    setLoading(true);
+    const data = await fetchResponse();
+    console.log(data);
+    setResponse(data);
+    setLoading(false);
+  };
+
   const handleDrawerClick = (val) => {
-    if (val === 0) {
+    if (val == 0) {
       setDisplayProfile(true);
       setDisplayHistory(false);
       setDisplayLink(false);
-    } else if (val === 1) {
+    } else if (val == 1) {
       setDisplayProfile(false);
       setDisplayHistory(true);
       setDisplayLink(false);
-    } else if (val === 2) {
+    } else if (val == 2) {
       setDisplayProfile(false);
       setDisplayHistory(false);
       setDisplayLink(true);
-    } else if (val === 3) {
+    } else if (val == 3) {
       setDisplaySignOutFragment(true);
 
     }
   };
+  async function fetchResponse() {
+    try {
+      const res = await axios.post(' http://localhost:5000/answer', {
+        context: `Visit 1: Patient Name: John Doe. Age: 35. Date: May 5, 2024. Diagnosis: Acute Sinusitis. Symptoms: Nasal congestion, facial   pain, headache. Prescription: Amoxicillin, decongestant spray. Visit 2: Patient Name: John Doe.Age: 35.Date: May 12, 2024. Diagnosis: Allergic Rhinitis. Symptoms: Sneezing, runny nose, itchy eyes. Prescription: Loratadine, nasal corticosteroid spray.Visit 3: Patient Name: John Doe.Age: 35.Date: May 19, 2024. Diagnosis: Chronic Sinusitis.Symptoms: Persistent nasal congestion, facial pressure, decreased sense of smell. Prescription: Amoxicillin-clavulanate, saline nasal irrigation. Visit 4: Patient Name: John Doe.Age: 35. Date: May 26, 2024. Diagnosis: Acute Bronchitis.Symptoms: Cough, chest discomfort, fatigue.Prescription: Azithromycin, cough syrup. Visit 5: Patient Name: John Doe. Age: 35. Date: June 2, 2024. Diagnosis: Seasonal Allergic Conjunctivitis. Symptoms: Itchy and red eyes, watery discharge. Prescription: Olopatadine eye drops, artificial tears.`,
+        question: prompt
+      });
+      console.log(res);
+      return res.data.answer;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -277,6 +310,17 @@ export default function PatientDashboard(props) {
           <DialogContentText>
             How may I help you today?
           </DialogContentText>
+          {loading && <Box sx={{ width: 300 }}>
+              <Skeleton />
+              <Skeleton animation="wave" />
+              <Skeleton animation={false} />
+            </Box>
+          }
+            { !loading && 
+            <DialogContentText id="alert-dialog-description" fontWeight="bold"  sx={{ marginY: '30px' }} >
+              {response}
+            </DialogContentText>
+            }
           <TextField
             autoFocus
             required
@@ -287,11 +331,13 @@ export default function PatientDashboard(props) {
             type="message"
             fullWidth
             variant="standard"
+            value={prompt}  // Set the value prop to the state variable
+            onChange={handlePromptChange}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={()=>{setDisplayChatBotFragment(false)}}>Cancel</Button>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" onClick={handleClickOpen}>Submit</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

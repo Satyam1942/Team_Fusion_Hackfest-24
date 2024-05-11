@@ -98,10 +98,6 @@ networks)
 - **Patient Dashboard:**
   - View Patients's Information: Patients can view their own information such as name, specialty, contact details, etc.
   - View Patient Medical History: Patients  can view the medical history of patients by entering their patient ID.
-  
-- **Lab Dashboard:**
-  - **Upload Lab Reports**: Lab personnel can upload lab reports and photos of reports such as CT Scans, MRIs, etc.
-  - **View Lab Reports**: Lab personnel can view uploaded lab reports for reference and analysis.
 
 -**Technologies Used:**
    -Frontend: React.js

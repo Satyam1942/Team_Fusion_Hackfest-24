@@ -56,14 +56,18 @@ export default function DoctorHistoryTable(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [rows, setRows] = React.useState([]);
   const [summary, setSummary] = React.useState('');
-  const summaryGeneratingAPIURL = "http://localhost:5000/predict";
+  const summaryGeneratingAPIURL = "http://localhost:5000/summarize";
 
   async function fetchSummary() {
     try {
+      const data = JSON.parse(props.tableData);
+      console.log(data.prescription);
       const res = await axios.post(summaryGeneratingAPIURL, {
-        cid: "ejkfhkj",
+        text: `Symptoms: Nasal congestion, facial pain, headache.
+        Prescription: Amoxicillin, decongestant spray.`
       });
-      return res.data;
+      console.log(res);
+      return res.data.summary;
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +98,7 @@ export default function DoctorHistoryTable(props) {
     setLoading(true);
     const data = await fetchSummary();
     console.log(data);
-    setSummary(data.prediction);
+    setSummary(data);
     setLoading(false);
     
   };
@@ -121,11 +125,9 @@ export default function DoctorHistoryTable(props) {
 
   }
 
-
   return (
     <>
       <Paper sx={{ width: '100%', overflow: 'hidden' }} marginTop={20}>
-
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -232,7 +234,7 @@ export default function DoctorHistoryTable(props) {
           </DialogTitle>
           <DialogContent>     
             <DialogContentText id="alert-dialog-description">
-              {props.prescription}
+              {JSON.parse(props.tableData).prescription}
             </DialogContentText>
             
           </DialogContent>

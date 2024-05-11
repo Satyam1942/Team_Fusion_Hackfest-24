@@ -21,7 +21,7 @@ import Skeleton from '@mui/material/Skeleton';
 
 
 const columns = [
-  { id: 'labId', label: 'Lab Id', minWidth: 170 },
+  { id: 'doctorId', label: 'Doctor Id', minWidth: 170 },
   { id: 'summary', label: 'Summary', minWidth: 100 },
   {
     id: 'date',
@@ -116,8 +116,8 @@ export default function PatientHistoryTable(props) {
   React.useEffect(() => {
     if (!tableData) return; // Do nothing if tableData is not available
    
+
     tableData.forEach((data) => {
-      console.log(data.labReport.labId);
       const newRow = createData(data.labReport.labId, data.labReport.timestamp, data.labReport.prescription);
       setRows(prevRows => [...prevRows, newRow]);
     });

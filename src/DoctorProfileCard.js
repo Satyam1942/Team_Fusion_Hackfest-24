@@ -13,6 +13,7 @@ export default function DoctorProfileCard(props) {
         <CardMedia
           component="img"
           height="140"
+        //   image="/static/images/cards/contemplative-reptile.jpg"
           alt="green iguana"
         />
         <CardContent>
