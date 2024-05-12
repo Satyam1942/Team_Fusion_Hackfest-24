@@ -39,6 +39,7 @@ export default function DoctorNewPatient() {
     const [allowPrescriptionDisplay, setAllowPrescriptionDisplay] = useState(false);
     const [validSubmitButton, setValidSubmitButton] = useState(true);
 
+    console.log(validSubmitButton);
     const verifyUser = () => {
         setAllowPrescriptionDisplay(true);
     }
@@ -79,13 +80,14 @@ export default function DoctorNewPatient() {
         return timestamp;
     }
 
-    const connectWalletandUploadPrescription = async (doctorId, patientId, reportHash) => {
+    const connectWalletandUploadPrescription = async ( patientId, doctorId, reportHash) => {
         const signer = await ConnectWallet();
         if (signer) {
-            const contractAddress = '0x6c19b5e81b43084641E4CA552D068DbCE96abCCD'; // Replace with your contract address
+            const contractAddress = '0x38eaA27bE9563BdC69863f779a0202E73Cbe29d5'; // Replace with your contract address
             const contract = new ethers.Contract(contractAddress, HackFestABI, signer);
 
             try {
+                console.log(patientId)
                 await contract.UploadPrescription(patientId, doctorId, reportHash);
                 console.log('succesfully uploaded');
                 setSubmissionSuccess(true);
@@ -98,21 +100,23 @@ export default function DoctorNewPatient() {
 
     const submitPrescription = async () => {
         const timestamp = getCurrentTimestamp();
-        const doctorId = "123";
-
+      
+        setValidSubmitButton(false);
         setDisplayProgress(true);
         // const oldData = await 
         const json = { "patientId": patientId, 'doctorId': doctorId, "prescription": patientPrescription, 'timestamp': timestamp }
 
         const response = await uploadFile(json, `${patientId}+${doctorId}`);
-
+        
         setDisplayProgress(false);
         if (response.status == 200) {
-            setSubmissionSuccess(true);
-            connectWalletandUploadPrescription( patientId, doctorId, response.data.IpfsHash);
+            
+            await connectWalletandUploadPrescription( patientId, doctorId, response.data.IpfsHash);
             setValidSubmitButton(true);
+            setSubmissionSuccess(true);
         } else if (response.status == 400) {
             setSubmissionFailure(true);
+            setValidSubmitButton(true);
         }
     }
 
@@ -168,7 +172,7 @@ export default function DoctorNewPatient() {
             }
 
             {allowPrescriptionDisplay && <Stack spacing={2} direction="row" sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-                <Button variant="contained" style={{ animation: 'slideInBottom 1s' }} onClick={submitPrescription}>Submit</Button>
+             {validSubmitButton &&   <Button variant="contained" style={{ animation: 'slideInBottom 1s' }} onClick={submitPrescription}>Submit</Button>}
             </Stack>
             }
 

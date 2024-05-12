@@ -17,10 +17,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import axios from 'axios';
 import Skeleton from '@mui/material/Skeleton';
-<<<<<<< HEAD
 
-=======
->>>>>>> 00af297ca046f2495d6305c42e0646a91418fdf0
 
 const columns = [
   { id: 'labId', label: 'Lab Id', minWidth: 170 },

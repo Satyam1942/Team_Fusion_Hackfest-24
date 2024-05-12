@@ -61,7 +61,7 @@ export default function DoctorHistory() {
       async function FetchReports(patientId, count) {
         const signer = await ConnectWallet();
         if (signer) {
-            const contractAddress = '0x6c19b5e81b43084641E4CA552D068DbCE96abCCD'; // Replace with your contract address
+            const contractAddress = '0x38eaA27bE9563BdC69863f779a0202E73Cbe29d5'; // Replace with your contract address
             const contract = new ethers.Contract(contractAddress, HackFestABI, signer);
 
             try {
@@ -78,11 +78,11 @@ export default function DoctorHistory() {
     async function FetchPrescription(patientId, count) {
         const signer = await ConnectWallet();
         if (signer) {
-            const contractAddress = '0x6c19b5e81b43084641E4CA552D068DbCE96abCCD'; // Replace with your contract address
+            const contractAddress = '0x38eaA27bE9563BdC69863f779a0202E73Cbe29d5'; // Replace with your contract address
             const contract = new ethers.Contract(contractAddress, HackFestABI, signer);
 
             try {
-                const patientReports = await contract.FetchPrescription(patientId, 1);
+                const patientReports = await contract.FetchPrescription(patientId, 2);
                 console.log('Patient details:', patientReports);
                 return patientReports;
             }
@@ -92,10 +92,19 @@ export default function DoctorHistory() {
         }
     }
 
-    async function processCIDArray(CIDArray) {
+    async function processCIDArrayLab(CIDArray) {
         const responseArray = [];
         for (const obj of CIDArray) {
             const labReport = await retrieveData(obj.Report_Hash);
+            responseArray.push({ "labReport": JSON.parse(labReport) });
+        }
+        return responseArray;
+    }
+
+    async function processCIDArrayDoctor(CIDArray) {
+        const responseArray = [];
+        for (const obj of CIDArray) {
+            const labReport = await retrieveData(obj.Prescription);
             responseArray.push({ "labReport": JSON.parse(labReport) });
         }
         return responseArray;
@@ -121,22 +130,22 @@ export default function DoctorHistory() {
             });
 
             console.log(CIDArray);
-            const responseArray = await processCIDArray(CIDArray);
+            const responseArray = await processCIDArrayLab(CIDArray);
             // console.log(responseArray); 
             setTableData(responseArray);
             setDisplayTableLab(true);
         } else  {
             const res = await FetchPrescription(patientId);
-           
+            
             const CIDArray = []
             res.forEach((item, index) => {
-                const data = { Prescription: item.Prescription };
+                const data = { Prescription: item.PrescriptionHash };
                 console.log(data);
                 CIDArray.push(data);
             });
 
             console.log(CIDArray);
-            const responseArray = await processCIDArray(CIDArray);
+            const responseArray = await processCIDArrayDoctor(CIDArray);
             // console.log(responseArray); 
             setTableData(responseArray);
              setDisplayTableDoctor(true);

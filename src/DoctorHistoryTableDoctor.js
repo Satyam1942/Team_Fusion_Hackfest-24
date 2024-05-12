@@ -45,10 +45,10 @@ const columns = [
   },
 ];
 
-function createData(labId, timestamp, prescription) {
+function createData(doctorId, timestamp, prescription) {
   const date = timestamp.split(",")[1];
   const time = timestamp.split(",")[0];
-  return { labId, date, time, prescription };
+  return { doctorId, date, time, prescription };
 }
 
 export default function DoctorHistoryTable(props) {
@@ -60,7 +60,7 @@ export default function DoctorHistoryTable(props) {
   const summaryGeneratingAPIURL = "http://localhost:5000/summarize";
   const tableData = props.tableData;
   console.log(tableData);
-
+  
   const OpenLinkButton = ({ link, buttonText }) => {
     const openLinkInNewTab = () => {
       window.open(link, '_blank');
@@ -258,7 +258,6 @@ export default function DoctorHistoryTable(props) {
             
           </DialogContent>
           <DialogActions>
-          <OpenLinkButton link={`https://ivory-tricky-chipmunk-595.mypinata.cloud/ipfs/${tableData[selectedRowIndex]?.labReport.reportHash}`} buttonText="Open Report" />
           </DialogActions>
         </Dialog>
       </React.Fragment>

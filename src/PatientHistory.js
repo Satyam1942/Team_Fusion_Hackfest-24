@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import TableLab from './PatientHistoryTable';
-import TableDoctor from './PatientHistoryTable';
+import TableDoctor from './PatientHistoryTableDoctor';
 
 import retrieveData from './retrieveFile';
 import Alert from '@mui/material/Alert';
@@ -43,7 +43,7 @@ export default function PatientHistory() {
     const [displayTableDoctor, setDisplayTableDoctor] = React.useState(false);
 
     const [submissionFailure, setSubmissionFailure] = React.useState(false);
-    const patientId = 1715445684;
+    const patientId = 1715467368;
 
     const handleChange = (event) => {
         setTime(event.target.value);
@@ -64,7 +64,7 @@ export default function PatientHistory() {
     async function FetchReports(patientId, count) {
         const signer = await ConnectWallet();
         if (signer) {
-            const contractAddress = '0x6c19b5e81b43084641E4CA552D068DbCE96abCCD'; // Replace with your contract address
+            const contractAddress = '0x38eaA27bE9563BdC69863f779a0202E73Cbe29d5'; // Replace with your contract address
             const contract = new ethers.Contract(contractAddress, HackFestABI, signer);
 
             try {
@@ -77,11 +77,36 @@ export default function PatientHistory() {
             }
         }
     }
+    async function FetchPrescription(patientId, count) {
+        const signer = await ConnectWallet();
+        if (signer) {
+            const contractAddress = '0x38eaA27bE9563BdC69863f779a0202E73Cbe29d5'; // Replace with your contract address
+            const contract = new ethers.Contract(contractAddress, HackFestABI, signer);
 
-    async function processCIDArray(CIDArray) {
+            try {
+                const patientReports = await contract.FetchPrescription(patientId, 2);
+                console.log('Patient details:', patientReports);
+                return patientReports;
+            }
+            catch (error) {
+                console.error('Error fetching patient details:', error);
+            }
+        }
+    }
+
+    async function processCIDArrayLab(CIDArray) {
         const responseArray = [];
         for (const obj of CIDArray) {
             const labReport = await retrieveData(obj.Report_Hash);
+            responseArray.push({ "labReport": JSON.parse(labReport) });
+        }
+        return responseArray;
+    }
+
+    async function processCIDArrayDoctor(CIDArray) {
+        const responseArray = [];
+        for (const obj of CIDArray) {
+            const labReport = await retrieveData(obj.Prescription);
             responseArray.push({ "labReport": JSON.parse(labReport) });
         }
         return responseArray;
@@ -107,25 +132,25 @@ export default function PatientHistory() {
             });
 
             console.log(CIDArray);
-            const responseArray = await processCIDArray(CIDArray);
+            const responseArray = await processCIDArrayLab(CIDArray);
             // console.log(responseArray); 
             setTableData(responseArray);
             setDisplayTableLab(true);
         } else  {
-            // const res = await FetchPrescription(patientId);
+            const res = await FetchPrescription(patientId);
 
-            // const CIDArray = []
-            // res.forEach((item, index) => {
-            //     const data = { Prescription: item.Prescription };
-            //     console.log(data);
-            //     CIDArray.push(data);
-            // });
+            const CIDArray = []
+            res.forEach((item, index) => {
+                const data = { Prescription: item.PrescriptionHash };
+                console.log(data);
+                CIDArray.push(data);
+            });
 
-            // console.log(CIDArray);
-            // const responseArray = await processCIDArray(CIDArray);
-            // // console.log(responseArray); 
-            // setTableData(responseArray);
-            //  setDisplayTableDoctor(true);
+            console.log(CIDArray);
+            const responseArray = await processCIDArrayDoctor(CIDArray);
+            // console.log(responseArray); 
+            setTableData(responseArray);
+             setDisplayTableDoctor(true);
         }
     };
 
