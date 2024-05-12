@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import Card from './DoctorProfileCard';
 import './animations.css';
 import Chart from './images/chart.png';
+import PatientAvatar from './images/patientAvatar.png'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -24,7 +25,7 @@ export default function PatientProfile(props) {
         <Grid container spacing={2}>
           {/* First Grid (Left on small screens, Right on larger screens) */}
           <Grid item xs={12} md={6} order={{ xs: 1, md: 1 }} style={{ animation: 'slideInRight 1s' }}>
-            <Card name={patientName} age={patientAge} id={patientId} gender={patientGender} dp = {dp} >
+            <Card name={patientName} age={patientAge} id={patientId} gender={patientGender} dp = {PatientAvatar} >
               xs=6 md=4
             </Card>
           </Grid>

@@ -101,4 +101,29 @@ networks)
 
 -**Technologies Used:**
    -Frontend: React.js
-   -Styling: CSS, Material UI
+   -Styling: CSS Material UI
+   - Backend: Framework Flask
+
+ML/AI and NLP Integration:
+
+Machine Learning Framework: TensorFlow (for building and training neural networks)
+Natural Language Processing (NLP): NLTK (Natural Language Toolkit), spaCy
+NLP Techniques: Text preprocessing, Named Entity Recognition (NER), Sentiment Analysis,Transfer learning,Tokenization,Seq2Seq Models.
+Data Manipulation: NumPy, Pandas
+Data Visualization: Matplotlib
+
+
+
+Blockchain Integration:
+Ethereum: Ether.js
+Smart Contract Development: Solidity
+Blockchain Protocol: Ethereum's blockchain protocol
+Decentralized Storage: IPFS (InterPlanetary File System) using Filecoin,Pinata
+
+ZK Authentication:
+Zero-Knowledge Authentication Protocols (ZKPs)
+Libraries/Frameworks: Web3.js for JavaScript-based ZK authentication
+Cryptographic Techniques: zk-SNARKs (Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge) for secure authentication, Circom
+
+Drive link - https://drive.google.com/drive/folders/1Ra4qzegnK-eqKZGE5FlCshAZzJVfmGa1?usp=share_link
+(It contains demo video drive link)

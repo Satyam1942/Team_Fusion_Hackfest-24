@@ -83,7 +83,7 @@ export default function DoctorNewPatient() {
     const connectWalletandUploadPrescription = async ( patientId, doctorId, reportHash) => {
         const signer = await ConnectWallet();
         if (signer) {
-            const contractAddress = '0x38eaA27bE9563BdC69863f779a0202E73Cbe29d5'; // Replace with your contract address
+            const contractAddress = '0x302847B6F0E0BE40d0065e22FFfd91b82EB9E94A'; // Replace with your contract address
             const contract = new ethers.Contract(contractAddress, HackFestABI, signer);
 
             try {

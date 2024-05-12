@@ -43,7 +43,7 @@ export default function PatientHistory() {
     const [displayTableDoctor, setDisplayTableDoctor] = React.useState(false);
 
     const [submissionFailure, setSubmissionFailure] = React.useState(false);
-    const patientId = 1715467368;
+    const patientId = 1715486736;
 
     const handleChange = (event) => {
         setTime(event.target.value);
@@ -64,11 +64,11 @@ export default function PatientHistory() {
     async function FetchReports(patientId, count) {
         const signer = await ConnectWallet();
         if (signer) {
-            const contractAddress = '0x38eaA27bE9563BdC69863f779a0202E73Cbe29d5'; // Replace with your contract address
+            const contractAddress = '0x302847B6F0E0BE40d0065e22FFfd91b82EB9E94A'; // Replace with your contract address
             const contract = new ethers.Contract(contractAddress, HackFestABI, signer);
 
             try {
-                const patientReports = await contract.getAllTheDetails(patientId, 1);
+                const patientReports = await contract.getAllTheDetails(patientId, 10);
                 console.log('Patient details:', patientReports);
                 return patientReports;
             }
@@ -80,11 +80,11 @@ export default function PatientHistory() {
     async function FetchPrescription(patientId, count) {
         const signer = await ConnectWallet();
         if (signer) {
-            const contractAddress = '0x38eaA27bE9563BdC69863f779a0202E73Cbe29d5'; // Replace with your contract address
+            const contractAddress = '0x302847B6F0E0BE40d0065e22FFfd91b82EB9E94A'; // Replace with your contract address
             const contract = new ethers.Contract(contractAddress, HackFestABI, signer);
 
             try {
-                const patientReports = await contract.FetchPrescription(patientId, 2);
+                const patientReports = await contract.FetchPrescription(patientId, 10);
                 console.log('Patient details:', patientReports);
                 return patientReports;
             }
